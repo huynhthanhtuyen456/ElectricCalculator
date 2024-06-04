@@ -36,17 +36,9 @@ namespace ElectricCalculator.Classes
 
     public class RetailElectricityInvoice(float index) : Invoice, IElectricityCalculation
     {
+        private readonly int[] ArrayIndex = new int[6] { 0, 50, 100, 200, 300, 400 };
+        private readonly int[] ArrayPrice = new int[6] { 1806, 1866, 2167, 2729, 3050, 3151 };
         private float Index => index;
-        /*
-         * Level 1: 0-50 kWh Price = 1806 VND
-         * Level 2: 51-100 kWh Price = 1866 VND
-         * Level 3: 101-200 kWh Price = 2167 VND
-         * Level 4: 201-300 kWh Price = 2729 VND
-         * Level 5: 301-400 kWh Price = 3050 VND
-         * Level 6: Above 401 kWh Price = 3151 VND
-         */
-        private readonly int[] ArrayIndex = new int[6] { 0, 51, 101, 201, 301, 401 };
-        private readonly float[] ArrayPrice = new float[6] { 1806, 1866, 2167, 2729, 3050, 3151 };
 
         public decimal SubTotal()
         {
@@ -54,16 +46,18 @@ namespace ElectricCalculator.Classes
             float tempIndex = this.Index;
             for (int i = this.ArrayIndex.Length - 1; i >= 0; i--)
             {
+                if (tempIndex < this.ArrayIndex[i])
+                {
+                    continue;
+                }
                 float subIndex = tempIndex - this.ArrayIndex[i];
                 if (subIndex > 0)
                 {
                     subTotal += subIndex * this.ArrayPrice[i];
-                }
-                else
-                {
-                    tempIndex -= this.ArrayIndex[i] - 1;
+                    tempIndex = this.ArrayIndex[i];
                 }
             }
+
             return (decimal)subTotal;
         }
 

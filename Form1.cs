@@ -6,7 +6,7 @@ namespace ElectricCalculator
 {
     public partial class ElectricCalculatorForm : Form
     {
-        private readonly string IDRgxPattern = @"[A-Za-z0-9]+$";
+        private readonly string IDRgxPattern = @"^[A-Za-z0-9]+$";
         private readonly string NameRgxPattern = @"^[A-Za-z\s]+$";
         private readonly string CurrentIndexPattern = @"^[0-9.]+$";
         private bool BtnClcState { get; set; }

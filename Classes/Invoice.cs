@@ -36,89 +36,35 @@ namespace ElectricCalculator.Classes
 
     public class RetailElectricityInvoice(float index) : Invoice, IElectricityCalculation
     {
-        // Level 1: 0-50 kWh
-        private readonly decimal PriceLevel1 = 1806;
-        // Level 2: 51-100 kWh
-        private readonly decimal PriceLevel2 = 1866;
-        // Level 3: 101-200 kWh
-        private readonly decimal PriceLevel3 = 2167;
-        // Level 4: 201-300 kWh
-        private readonly decimal PriceLevel4 = 2729;
-        // Level 5: 301-400 kWh
-        private readonly decimal PriceLevel5 = 3050;
-        // Level 6: Above 401 kWh
-        private readonly decimal PriceLevel6 = 3151;
         private float Index => index;
-
-        private decimal CalculateTotalLevel1(float index)
-        {
-            return (decimal)(index * (float)PriceLevel1);
-        }
-
-        private decimal CalculateTotalLevel2(float index)
-        {
-            return (decimal)(index * (float)PriceLevel2);
-        }
-
-        private decimal CalculateTotalLevel3(float index)
-        {
-            return (decimal)(index * (float)PriceLevel3);
-        }
-
-        private decimal CalculateTotalLevel4(float index)
-        {
-            return (decimal)(index * (float)PriceLevel4);
-        }
-
-        private decimal CalculateTotalLevel5(float index)
-        {
-            return (decimal)(index * (float)PriceLevel5);
-        }
-
-        private decimal CalculateTotalLevel6()
-        {
-            return (decimal)((this.Index - 400) * (float)PriceLevel6);
-        }
+        /*
+         * Level 1: 0-50 kWh Price = 1806 VND
+         * Level 2: 51-100 kWh Price = 1866 VND
+         * Level 3: 101-200 kWh Price = 2167 VND
+         * Level 4: 201-300 kWh Price = 2729 VND
+         * Level 5: 301-400 kWh Price = 3050 VND
+         * Level 6: Above 401 kWh Price = 3151 VND
+         */
+        private readonly int[] ArrayIndex = new int[6] { 0, 51, 101, 201, 301, 401 };
+        private readonly float[] ArrayPrice = new float[6] { 1806, 1866, 2167, 2729, 3050, 3151 };
 
         public decimal SubTotal()
         {
-            decimal subTotal = 0;
-            if (this.Index <= 50)
+            float subTotal = 0;
+            float tempIndex = this.Index;
+            for (int i = this.ArrayIndex.Length - 1; i >= 0; i--)
             {
-                subTotal += this.CalculateTotalLevel1(this.Index);
+                float subIndex = tempIndex - this.ArrayIndex[i];
+                if (subIndex > 0)
+                {
+                    subTotal += subIndex * this.ArrayPrice[i];
+                }
+                else
+                {
+                    tempIndex -= this.ArrayIndex[i] - 1;
+                }
             }
-            else if (this.Index >= 51 && this.Index <= 100)
-            {
-                subTotal += this.CalculateTotalLevel1(50) + this.CalculateTotalLevel2(this.Index - 50);
-            }
-            else if (this.Index >= 101 && this.Index <= 200)
-            {
-                subTotal += this.CalculateTotalLevel1(50) + this.CalculateTotalLevel2(50) + this.CalculateTotalLevel3(this.Index - 100);
-            }
-            else if (this.Index >= 201 && this.Index <= 300)
-            {
-                subTotal += this.CalculateTotalLevel1(50) + this.CalculateTotalLevel2(50) + this.CalculateTotalLevel3(100) + this.CalculateTotalLevel4(this.Index - 200);
-            }
-            else if (this.Index >= 301 && this.Index <= 400)
-            {
-                subTotal += 
-                    this.CalculateTotalLevel1(50)
-                    + this.CalculateTotalLevel2(50)
-                    + this.CalculateTotalLevel3(100)
-                    + this.CalculateTotalLevel4(100)
-                    + this.CalculateTotalLevel5(this.Index - 300);
-            }
-            else 
-            {
-                subTotal +=
-                    this.CalculateTotalLevel1(50)
-                    + this.CalculateTotalLevel2(50)
-                    + this.CalculateTotalLevel3(100)
-                    + this.CalculateTotalLevel4(100)
-                    + this.CalculateTotalLevel5(100)
-                    + this.CalculateTotalLevel6();
-            }
-            return subTotal;
+            return (decimal)subTotal;
         }
 
         public decimal Total()

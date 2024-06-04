@@ -100,6 +100,7 @@
             // ListViewElectricCost
             // 
             ListViewElectricCost.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            ListViewElectricCost.FullRowSelect = true;
             ListViewElectricCost.Location = new Point(12, 160);
             ListViewElectricCost.Name = "ListViewElectricCost";
             ListViewElectricCost.Size = new Size(637, 293);

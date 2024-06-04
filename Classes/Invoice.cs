@@ -40,6 +40,17 @@ namespace ElectricCalculator.Classes
         private readonly int[] ArrayPrice = new int[6] { 1806, 1866, 2167, 2729, 3050, 3151 };
         private float Index => index;
 
+        /*
+         * Data structure of this algorithm
+         * For example, Index 583
+         * 583 - 400 = 183
+         * 400 - 300 = 100
+         * 300 - 200 = 100
+         * 200 - 100 = 100
+         * 100 - 50 = 50
+         * 50 - 0 = 50
+         * Therefore, subtrahend will be minuend of the next calculation and result of each calculation will multiply with level of electric price
+         */
         public decimal SubTotal()
         {
             float subTotal = 0;
